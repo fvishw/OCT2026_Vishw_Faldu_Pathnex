@@ -1,0 +1,31 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  script:
+  - mvn clean compile
+
+test:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+  script:
+  - mvn test
+
+deploy-dev:
+  stage: deploy
+  script:
+  - ./deploy-dev.sh
+  rules:
+  - if: '$CI_COMMIT_BRANCH == "dev"'
+
+deploy-main:
+  stage: deploy
+  script:
+  - ./deploy-prod.sh
+  rules:
+  - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    when: manual
