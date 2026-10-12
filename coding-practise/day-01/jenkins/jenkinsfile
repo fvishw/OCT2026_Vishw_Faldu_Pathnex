@@ -1,0 +1,30 @@
+pipeline{
+    agent any
+
+    environment{
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages{
+        stage('checkout'){
+            steps{
+                checkout scm
+            }
+        }
+
+        stage('build'){
+            steps{
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Deployment to prod'){
+            when {
+                branch 'main'
+            }
+            steps{
+                sh './deployment-prod.sh'
+            }
+        }
+
+    }
+}
