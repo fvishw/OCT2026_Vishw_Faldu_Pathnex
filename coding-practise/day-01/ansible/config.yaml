@@ -1,0 +1,29 @@
+- name: Create config file for pathnex
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: write content to file
+    copy:
+      # src: pathnex.conf 
+      dest: /etc/pathnex.conf
+      content: |
+        welcome to world of devsecops
+        today is day 12
+  - name: copy nginx config
+    template: 
+      src: /template/nginx.conf
+      dest: /etc/nginx/nginx.conf
+      owner: root
+      group: root
+      mode: "0644" # rwx
+      notify: 
+      - Restart Pathnex
+  handlers:
+  - name: Restart Pathnex
+    systemd:
+      name: nginx
+      state: restarted
+  # we use handlers for if we want do something based on another tasks
+  # for restart systemd after adding config file so that it get requried effect
+# we can use content and src for the content
