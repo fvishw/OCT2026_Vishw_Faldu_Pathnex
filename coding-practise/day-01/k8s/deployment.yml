@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neostream-rolling
+spec:
+  replicas: 3
+  template:
+    metadata: 
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx-pod
+  selector:
+    matchLabels: 
+      app: nginx
+  stretegy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 5
