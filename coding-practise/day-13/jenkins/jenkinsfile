@@ -1,0 +1,28 @@
+pipeline{
+    agent any
+    environment{
+        ENV = "dev"
+    }
+    stages{
+        stage('Multi-Java-Build'){
+            matrix{
+                axes{
+                    axis{
+                        name: 'JAVA_VERSION'
+                        values: '8','11','17'
+                    }
+                }
+            }
+        stages{
+                stage('Build'){
+                    steps{
+                        sh '''
+                            echo "Instance: $INSTITUTE_NAME"
+                            echo "Building with JAVA $JAVA_VERSION" 
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
